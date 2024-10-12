@@ -1,0 +1,23 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout code from GitHub
+        uses: actions/checkout@v2
+
+      - name: Build Project (Optional for Next.js or other build processes)
+        run: npm run build # Ensure your project builds without errors
+
+      - name: Deploying to Vercel
+        run: npx vercel --prod # Use Vercel CLI to deploy project in production

@@ -1,0 +1,32 @@
+name: CI pipeline
+
+on:
+  push:
+    branches:
+      # Run Jobs only when code push on these branches
+      - main
+      - master
+  pull_request:
+    branches:
+      # Run workflows only when making a pull request on these branches
+      - main
+      - master
+
+jobs:
+  # CI { Continuous Integration }
+  test:
+    name: Run Tests on latest OS
+    runs-on: ubuntu-latest #{ Linux in this case }
+
+    steps:
+      - name: Checkout latest code in repo
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
